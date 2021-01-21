@@ -7,10 +7,27 @@ Created on Mon Jan 18 21:35:45 2021
 """
 
 import time 
+import smtplib
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from sms_alert import email_alert
+from email.message import EmailMessage
 from selenium.webdriver.firefox.options import Options
+
+def email_alert(subject, body, to):
+    msg = EmailMessage()
+    msg.set_content(body)
+    msg["subject"] = subject
+    msg["to"] = to
+    
+    user = "<your.email>@gmail.com"
+    msg['from'] = user
+    password = "<gmail application password>"
+    
+    server = smtplib.SMTP("smtp.gmail.com", 587)
+    server.starttls()
+    server.login(user,password)
+    server.send_message(msg)
+    server.quit()
 
 opt = Options()
 opt.headless = True
